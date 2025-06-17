@@ -1,5 +1,5 @@
 steps:
-  - name: 'gcr.io/cloud-builders/maven:3.9.4'
+  - name: 'gcr.io/cloud-builders/mvn'
     args: ['clean', 'install']
 
   - name: 'gcr.io/cloud-builders/docker'
