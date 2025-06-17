@@ -1,16 +1,34 @@
-steps:
-- name: 'gcr.io/cloud-builders/maven:3.6.3' # IMPORTANT: Changed from 'latest' to a specific version
-  args: ['package', '-DskipTests']
-  # Assuming your pom.xml is in the root of your source directory.
+# backend-cloudbuild.yaml (or simply cloudbuild.yaml if this is the only one in the repo)
 
+steps:
+# Step 1: Build the Java application using Maven
+# This step compiles your Java code and packages it into a JAR file.
+# IMPORTANT: You need to replace '3.X.X' with a specific, existing tag
+# for the Maven Cloud Builder image that you confirm exists in your Artifact Registry.
+# (Go to Artifact Registry -> cloud-builders -> maven to find actual tags).
+- name: 'gcr.io/cloud-builders/maven:3.X.X' # Example: 'gcr.io/cloud-builders/maven:3.9.6' or 'gcr.io/cloud-builders/maven:3.8.8-jdk11'
+  args: ['package', '-DskipTests'] # 'package' creates the JAR; '-DskipTests' skips running tests (can remove if you want tests to run).
+  # This assumes your `pom.xml` (Maven project file) is in the root directory
+  # where your `cloudbuild.yaml` and `Dockerfile` are located.
+
+# Step 2: Build the Docker image
+# This step uses your Dockerfile to create the Docker image.
+# It depends on the JAR file created in the previous Maven step.
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerbackend:latest', '.']
+  # '-t': Tags the image. 'gcr.io/${PROJECT_ID}/crackerbackend:latest' will be the full image name.
+  # '.': Indicates that the Dockerfile is in the current directory.
 
+# Step 3: Push the Docker image to Google Container Registry (GCR)
+# This makes your built Docker image available in your Google Cloud Project.
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/${PROJECT_ID}/crackerbackend:latest']
 
+# Specifies the images that will be built and pushed by this Cloud Build configuration.
 images:
 - 'gcr.io/${PROJECT_ID}/crackerbackend:latest'
 
-options: # IMPORTANT: Added this block back for logging configuration
-  logging: CLOUD_LOGGING_ONLY
+# Global options for the Cloud Build, including logging configuration.
+# This addresses common errors related to build service accounts and log storage.
+options:
+  logging: CLOUD_LOGGING_ONLY # Sends all build logs directly to Cloud Logging for easy viewing.
