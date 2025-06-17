@@ -11,3 +11,6 @@ steps:
 
 images:
 - 'gcr.io/${PROJECT_ID}/crackerapp:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
