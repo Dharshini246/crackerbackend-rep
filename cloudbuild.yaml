@@ -1,16 +1,16 @@
 steps:
-- name: 'gcr.io/cloud-builders/maven'
-  args: ['package', '-DskipTests'] # Or 'install' if you need it in local Maven repo
+- name: 'gcr.io/cloud-builders/maven:3.8.2' # IMPORTANT: Changed from 'latest' to a specific version
+  args: ['package', '-DskipTests']
   # Assuming your pom.xml is in the root of your source directory.
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerapp:latest', '.']
+  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerbackend:latest', '.']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/${PROJECT_ID}/crackerapp:latest']
+  args: ['push', 'gcr.io/${PROJECT_ID}/crackerbackend:latest']
 
 images:
-- 'gcr.io/${PROJECT_ID}/crackerapp:latest'
+- 'gcr.io/${PROJECT_ID}/crackerbackend:latest'
 
-options:
+options: # IMPORTANT: Added this block back for logging configuration
   logging: CLOUD_LOGGING_ONLY
