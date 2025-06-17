@@ -1,28 +1,18 @@
 steps:
+  # Step 1: Run Maven to build the JAR
   - name: 'gcr.io/cloud-builders/maven'
     args: ['clean', 'install']
 
-  # This assumes your `pom.xml` (Maven project file) is in the root directory
-  # where your `cloudbuild.yaml` and `Dockerfile` are located.
+  # Step 2: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerbackend:latest', '.']
 
-# Step 2: Build the Docker image
-# This step uses your Dockerfile to create the Docker image.
-# It depends on the JAR file created in the previous Maven step.
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerbackend:latest', '.']
-  # '-t': Tags the image. 'gcr.io/${PROJECT_ID}/crackerbackend:latest' will be the full image name.
-  # '.': Indicates that the Dockerfile is in the current directory.
+  # Step 3: Push the Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${PROJECT_ID}/crackerbackend:latest']
 
-# Step 3: Push the Docker image to Google Container Registry (GCR)
-# This makes your built Docker image available in your Google Cloud Project.
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/${PROJECT_ID}/crackerbackend:latest']
-
-# Specifies the images that will be built and pushed by this Cloud Build configuration.
 images:
-- 'gcr.io/${PROJECT_ID}/crackerbackend:latest'
+  - 'gcr.io/${PROJECT_ID}/crackerbackend:latest'
 
-# Global options for the Cloud Build, including logging configuration.
-# This addresses common errors related to build service accounts and log storage.
 options:
-  logging: CLOUD_LOGGING_ONLY # Sends all build logs directly to Cloud Logging for easy viewing.
+  logging: CLOUD_LOGGING_ONLY
