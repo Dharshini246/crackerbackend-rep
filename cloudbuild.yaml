@@ -1,5 +1,5 @@
 steps:
-- name: 'gcr.io/cloud-builders/maven:3.8.2' # IMPORTANT: Changed from 'latest' to a specific version
+- name: 'gcr.io/cloud-builders/maven:3.6.3' # IMPORTANT: Changed from 'latest' to a specific version
   args: ['package', '-DskipTests']
   # Assuming your pom.xml is in the root of your source directory.
 
