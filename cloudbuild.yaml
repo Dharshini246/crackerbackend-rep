@@ -8,6 +8,18 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/cracker-backend-repo/crackerbackend:latest']
 
+    - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run', 'deploy', 'backend-service',  # <-- You can name this whatever you want
+        '--image', 'us-central1-docker.pkg.dev/${PROJECT_ID}/cracker-backend-repo/crackerbackend:latest',
+        '--region', 'us-central1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',           # <-- Optional: make public
+        '--port', '8080'                     # <-- Required for Spring Boot if it listens on 8080
+      ]
+
 images:
   - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cracker-backend-repo/crackerbackend:latest'
 
