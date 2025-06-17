@@ -1,13 +1,7 @@
-# backend-cloudbuild.yaml (or simply cloudbuild.yaml if this is the only one in the repo)
-
 steps:
-# Step 1: Build the Java application using Maven
-# This step compiles your Java code and packages it into a JAR file.
-# IMPORTANT: You need to replace '3.X.X' with a specific, existing tag
-# for the Maven Cloud Builder image that you confirm exists in your Artifact Registry.
-# (Go to Artifact Registry -> cloud-builders -> maven to find actual tags).
-- name: 'gcr.io/cloud-builders/maven:3.X.X' # Example: 'gcr.io/cloud-builders/maven:3.9.6' or 'gcr.io/cloud-builders/maven:3.8.8-jdk11'
-  args: ['package', '-DskipTests'] # 'package' creates the JAR; '-DskipTests' skips running tests (can remove if you want tests to run).
+  - name: 'gcr.io/cloud-builders/maven'
+    args: ['clean', 'install']
+
   # This assumes your `pom.xml` (Maven project file) is in the root directory
   # where your `cloudbuild.yaml` and `Dockerfile` are located.
 
