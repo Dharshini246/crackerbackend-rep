@@ -1,27 +1,13 @@
 steps:
+- name: 'gcr.io/cloud-builders/maven'
+  args: ['package', '-DskipTests'] # Or 'install' if you need it in local Maven repo
+  # Assuming your pom.xml is in the root of your source directory.
+
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerapp:${_TAG}', '.']
+  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerapp:latest', '.']
+
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/${PROJECT_ID}/crackerapp:${_TAG}']
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
-  - gcloud
-  - run
-  - deploy
-  - crackerapp
-  - --image
-  - gcr.io/${PROJECT_ID}/crackerapp:${_TAG}
-  - --region
-  - ${_REGION} # e.g., us-central1, europe-west1
-  - --platform
-  - managed
-  # Deploy the image to Google Cloud Run
-  # Replace 'crackerapp' with your desired service name
-  # Replace ${_REGION} with your preferred Google Cloud region
+  args: ['push', 'gcr.io/${PROJECT_ID}/crackerapp:latest']
+
 images:
-- 'gcr.io/${PROJECT_ID}/crackerapp:${_TAG}' # List the image pushed by this build
-options:
-  logging: CLOUD_LOGGING_ONLY # Optional: Only send logs to Cloud Logging
-substitutions:
-  _TAG: 'latest' # Default tag, you might want to use commit SHA, timestamp, or build ID
-  _REGION: 'us-central1' # Default region, **CHANGE THIS TO YOUR DESIRED REGION**
+- 'gcr.io/${PROJECT_ID}/crackerapp:latest'
