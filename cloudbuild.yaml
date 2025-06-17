@@ -3,13 +3,13 @@ steps:
     args: ['clean', 'install']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/${PROJECT_ID}/crackerbackend:latest', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/${PROJECT_ID}/cracker-backend-repo/crackerbackend:latest', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/${PROJECT_ID}/crackerbackend:latest']
+    args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/cracker-backend-repo/crackerbackend:latest']
 
 images:
-  - 'gcr.io/${PROJECT_ID}/crackerbackend:latest'
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cracker-backend-repo/crackerbackend:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
