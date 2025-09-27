@@ -1,0 +1,11 @@
+name: Backend Listener
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo from backend
+        run: echo "Frontend triggered this via CMD!"
