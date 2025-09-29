@@ -1,12 +1,22 @@
-name: Triggered by Frontend
+name: Backend CI on Frontend Trigger
 
 on:
   repository_dispatch:
     types: [frontend-updated]
 
 jobs:
-  log-message:
+  handle-frontend-message:
     runs-on: ubuntu-latest
     steps:
-      - name: Log that frontend was updated
-        run: echo "Frontend repo was updated!"
+      - uses: actions/checkout@v3
+
+      - name: Write frontend message to file
+        run: |
+          echo "${{ github.event.client_payload.message }}" > frontend_message.txt
+          echo "Stored frontend message:"
+          cat frontend_message.txt
+      
+      - name: Backend build and test
+        run: |
+          echo "Run your backend build and tests here"
+          # example: ./build_backend.sh
