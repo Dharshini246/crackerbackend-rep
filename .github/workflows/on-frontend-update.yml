@@ -1,0 +1,12 @@
+name: Triggered by Frontend
+
+on:
+  repository_dispatch:
+    types: [frontend-updated]
+
+jobs:
+  log-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log that frontend was updated
+        run: echo "Frontend repo was updated!"
